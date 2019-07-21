@@ -33,7 +33,9 @@ function! airline#extensions#stopwatch#apply(...)
     let w:airline_section_c .= s:spc.g:airline_right_alt_sep
   endif
   let w:airline_section_c .= s:spc.'%{airline#extensions#stopwatch#get()}'
-  let w:airline_section_c .= s:spc.g:airline_left_alt_sep
+  if g:airline_left_alt_sep != ''
+      let w:airline_section_c .= s:spc.g:airline_left_alt_sep
+  endif
 endfunction
 
 let g:airline#extensions#stopwatch#start_time = reltime()
@@ -81,7 +83,3 @@ function! airline#extensions#stopwatch#reset()
   let g:airline#extensions#stopwatch#elapsed_time = 0
   let g:airline#extensions#stopwatch#saved_time = 0
 endfunction
-
-map tr :call airline#extensions#stopwatch#run()<CR>
-map ts :call airline#extensions#stopwatch#stop()<CR>
-map tt :call airline#extensions#stopwatch#reset()<CR>
