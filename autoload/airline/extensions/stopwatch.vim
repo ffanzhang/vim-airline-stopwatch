@@ -23,7 +23,6 @@ endif
 
 function! airline#extensions#stopwatch#init(ext)
   call airline#parts#define_raw('stopwatch', '%{airline#extensions#stopwatch#get()}')
-  let g:airline#extensions#stopwatch#ext = a:ext
   call a:ext.add_statusline_func('airline#extensions#stopwatch#apply')
 endfunction
 
