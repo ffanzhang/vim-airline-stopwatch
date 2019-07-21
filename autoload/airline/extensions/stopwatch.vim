@@ -22,25 +22,18 @@ if !exists('g:airline#extensions#stopwatch#polling_period')
 endif
 
 function! airline#extensions#stopwatch#init(ext)
+  call airline#extensions#stopwatch#reset()
   call airline#parts#define_raw('stopwatch', '%{airline#extensions#stopwatch#get()}')
   call a:ext.add_statusline_func('airline#extensions#stopwatch#apply')
 endfunction
 
 function! airline#extensions#stopwatch#apply(...)
-  let w:airline_section_c = get(w:, 'airline_section_c', g:airline_section_c)
+  let w:airline_section_z = get(w:, 'airline_section_z', g:airline_section_z)
   if g:airline_right_alt_sep != ''
-    let w:airline_section_c .= s:spc.g:airline_right_alt_sep
+    let w:airline_section_z .= s:spc.g:airline_right_alt_sep
   endif
-  let w:airline_section_c .= s:spc.'%{airline#extensions#stopwatch#get()}'
-  if g:airline_left_alt_sep != ''
-      let w:airline_section_c .= s:spc.g:airline_left_alt_sep
-  endif
+  let w:airline_section_z .= s:spc.'%{airline#extensions#stopwatch#get()}'
 endfunction
-
-let g:airline#extensions#stopwatch#start_time = reltime()
-let g:airline#extensions#stopwatch#running = 0
-let g:airline#extensions#stopwatch#saved_time = 0
-let g:airline#extensions#stopwatch#elapsed_time = 0
 
 function! airline#extensions#stopwatch#get()
   if g:airline#extensions#stopwatch#running
@@ -55,19 +48,23 @@ function! airline#extensions#stopwatch#update(timer)
   call airline#update_statusline()
 endfunction
 
+" timer is used to refresh status line, not for time tracking
 function! airline#extensions#stopwatch#new_timer()
   return timer_start(
           \ g:airline#extensions#stopwatch#polling_period,
           \ 'airline#extensions#stopwatch#update',{'repeat':-1})
 endfunction
 
-let g:airline#extensions#stopwatch#timer = airline#extensions#stopwatch#new_timer()
-
 function! airline#extensions#stopwatch#run()
   if g:airline#extensions#stopwatch#running == 0
     let g:airline#extensions#stopwatch#start_time = reltime()
     let g:airline#extensions#stopwatch#running = 1
+    let g:airline#extensions#stopwatch#timer = airline#extensions#stopwatch#new_timer()
   endif
+endfunction
+
+function! airline#extensions#stopwatch#split()
+  echom airline#extensions#stopwatch#get()
 endfunction
 
 function! airline#extensions#stopwatch#stop()
@@ -75,10 +72,17 @@ function! airline#extensions#stopwatch#stop()
     let g:airline#extensions#stopwatch#running = 0
     let g:airline#extensions#stopwatch#saved_time = g:airline#extensions#stopwatch#elapsed_time
   endif
+  if exists("g:airline#extensions#stopwatch#timer")
+    call timer_stop(g:airline#extensions#stopwatch#timer)
+  endif
 endfunction
 
 function! airline#extensions#stopwatch#reset()
   let g:airline#extensions#stopwatch#running = 0
   let g:airline#extensions#stopwatch#elapsed_time = 0
   let g:airline#extensions#stopwatch#saved_time = 0
+  let g:airline#extensions#stopwatch#start_time = reltime()
+  if exists("g:airline#extensions#stopwatch#timer")
+    call timer_stop(g:airline#extensions#stopwatch#timer)
+  endif
 endfunction
