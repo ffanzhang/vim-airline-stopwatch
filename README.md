@@ -24,6 +24,9 @@
 :call airline#extensions#stopwatch#reset()<CR>
 ```
 ## viewing splits
+- each split will create an entry on the statusline, if there are
+too many splits that overflows the statusline, use the following to view
+the split times.
 ```
 :messages
 ```
@@ -56,3 +59,4 @@ map tr :call airline#extensions#stopwatch#run()<CR>
 map tp :call airline#extensions#stopwatch#split()<CR>
 map ts :call airline#extensions#stopwatch#stop()<CR>
 map tt :call airline#extensions#stopwatch#reset()<CR>
+```
