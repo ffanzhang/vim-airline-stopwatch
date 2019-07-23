@@ -35,8 +35,7 @@ function! airline#extensions#stopwatch#apply(...)
 endfunction
 
 function! s:get_elapsed_time()
-    return s:saved_time +
-                \ reltimefloat(reltime(s:start_time))
+  return s:saved_time + reltimefloat(reltime(s:start_time))
 endfunction
 
 function! s:time_to_string(time)
@@ -44,11 +43,11 @@ function! s:time_to_string(time)
 endfunction
 
 function! s:list_to_string(list, separator)
-    let ans = ""
-    for item in a:list
-      let ans = (ans == "") ? item : (ans . a:separator . item)
-    endfor
-    return ans
+  let ans = ""
+  for item in a:list
+    let ans = (ans == "") ? item : (ans . a:separator . item)
+  endfor
+  return ans
 endfunction
 
 function! airline#extensions#stopwatch#get()
@@ -85,7 +84,7 @@ endfunction
 function! airline#extensions#stopwatch#split()
   if s:running == 1
     let s:time_list = s:time_list + [s:time_to_string(s:get_elapsed_time())]
-    echom s:list_to_string(s:time_list, ',')
+    echom s:list_to_string(s:time_list, '|')
   endif
 endfunction
 
