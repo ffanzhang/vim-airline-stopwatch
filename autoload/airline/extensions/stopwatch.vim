@@ -1,5 +1,10 @@
 scriptencoding utf-8
 
+if v:version < 800
+  echoerr "stopwatch: requires vim 8.0+"  
+  finish
+endif
+
 if !has("timers")
   echoerr "stopwatch: requires vim with +timers feature"
   finish

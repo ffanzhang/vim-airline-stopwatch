@@ -2,7 +2,7 @@
 - a vim-airline extension that implements a stopwatch
 
 # Requirements
-- vim
+- vim 8.0
 - vim-airline plugin
 - vim compiled with the following features, this means when you type
     vim --version, the following features will show up
