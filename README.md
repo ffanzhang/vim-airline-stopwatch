@@ -14,7 +14,6 @@
 | ------------- | ------------- |
 | [Pathogen] | `git clone https://github.com/ffanzhang/vim-airline-stopwatch ~/.vim/bundle/vim-airline-stopwatch`|
 | [Vundle] | `Plugin 'ffanzhang/vim-airline-stopwatch'` |
-| manual | copy all of the files into your `~/.vim` directory |
 
 # Usage
 ```
