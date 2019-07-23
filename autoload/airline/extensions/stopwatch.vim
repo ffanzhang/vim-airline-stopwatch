@@ -150,9 +150,6 @@ if exists("g:airline_stopwatch_runtests") && g:airline_stopwatch_runtests
     call assert_equal("100:00:00.00",   s:time_to_string(360000.0000))
     call assert_equal("200:57:02.12",   s:time_to_string(723422.1234))
 
-    call airline#extensions#stopwatch#reset()
-    call airline#extensions#stopwatch#run()
-
     if len(v:errors) == 0
         echom "stopwatch: all tests have passed"
     else
