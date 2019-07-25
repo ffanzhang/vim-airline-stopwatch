@@ -13,11 +13,13 @@
 | Plugin Manager | Install with... |
 | ------------- | ------------- |
 | [Pathogen] | `git clone https://github.com/ffanzhang/vim-airline-stopwatch ~/.vim/bundle/vim-airline-stopwatch`|
-| [Vundle] | `Plugin 'ffanzhang/vim-airline-stopwatch'` |
+| [Vundle] | `Plugin 'ffanzhang/vim-airline-stopwatch'` , then :source %, :PluginInstall in vim|
+| [Plug] | `Plug 'ffanzhang/vim-airline-stopwatch'`, then :source %, :PlugInstall in vim|
 - for Pathogen and zipped version, we can also place everything under ~/.vim/bundle, so
   the directory will look like ~/.vim/bundle/vim-airline-stopwatch/..
 
 # Usage
+- also see the Customization section to setup mappings
 ```
 :call airline#extensions#stopwatch#run()<CR>
 :call airline#extensions#stopwatch#split()<CR>
@@ -25,10 +27,10 @@
 :call airline#extensions#stopwatch#reset()<CR>
 ```
 
-## viewing splits
-- each split will create an entry on the statusline, if there are
-too many splits that overflows the statusline, use the following to view
-the split times. Note the final stop time is not included in messages. The
+## Viewing time splits
+- each time split will create an entry on the statusline. If there are
+too many splits that overflow the statusline, use the type :messges to view
+the splits. Note the final stop time is not included in messages. The
 rationale is stop() is actually pause() in disguise :)
 ```
 :messages

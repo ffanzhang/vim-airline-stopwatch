@@ -16,34 +16,18 @@ if !has("reltime")
 endif
 
 if exists('g:loaded_vim_airline_stopwatch')
+  " already loaded
   finish
 endif
 
 let g:loaded_vim_airline_stopwatch = 1
 let s:spc = g:airline_symbols.space
 let s:rsp = (g:airline_right_alt_sep == '') ? ('|') : (g:airline_right_alt_sep)
-  let s:elapsed_time = 0
-  let s:saved_time = 0
-  let s:start_time = reltime()
-  let s:time_list = []
-  let s:running = 0
-
-
-if !exists('g:airline#extensions#stopwatch#polling_period')
-  let g:airline#extensions#stopwatch#polling_period = 50
-endif
-
-function! airline#extensions#stopwatch#init(ext)
-  call airline#extensions#stopwatch#reset()
-  call airline#parts#define_raw('stopwatch', '%{airline#extensions#stopwatch#get()}')
-  call a:ext.add_statusline_func('airline#extensions#stopwatch#apply')
-endfunction
-
-function! airline#extensions#stopwatch#apply(...)
-  let w:airline_section_z = get(w:, 'airline_section_z', g:airline_section_z)
-  let w:airline_section_z .= s:spc . s:rsp
-  let w:airline_section_z .= s:spc . '%{airline#extensions#stopwatch#get()}'
-endfunction
+let s:elapsed_time = 0
+let s:saved_time = 0
+let s:start_time = reltime()
+let s:time_list = []
+let s:running = 0
 
 function! s:get_elapsed_time()
   return s:saved_time + reltimefloat(reltime(s:start_time))
@@ -72,6 +56,22 @@ function! s:list_to_string(list, separator)
     let ans = (ans == "") ? item : (ans . a:separator . item)
   endfor
   return ans
+endfunction
+
+if !exists('g:airline#extensions#stopwatch#polling_period')
+  let g:airline#extensions#stopwatch#polling_period = 50
+endif
+
+function! airline#extensions#stopwatch#init(ext)
+  call airline#extensions#stopwatch#reset()
+  call airline#parts#define_raw('stopwatch', '%{airline#extensions#stopwatch#get()}')
+  call a:ext.add_statusline_func('airline#extensions#stopwatch#apply')
+endfunction
+
+function! airline#extensions#stopwatch#apply(...)
+  let w:airline_section_z = get(w:, 'airline_section_z', g:airline_section_z)
+  let w:airline_section_z .= s:spc . s:rsp
+  let w:airline_section_z .= s:spc . '%{airline#extensions#stopwatch#get()}'
 endfunction
 
 function! airline#extensions#stopwatch#get()
@@ -135,27 +135,33 @@ endfunction
 
 " testing is only enabled is g:airline_stopwatch_runtests is set
 if exists("g:airline_stopwatch_runtests") && g:airline_stopwatch_runtests
-    " test time to string
-    call assert_equal("0.00",           s:time_to_string(0.0000))
-    call assert_equal("0.01",           s:time_to_string(0.0100))
-    call assert_equal("0.28",           s:time_to_string(0.2800))
-    call assert_equal("05.00",          s:time_to_string(5.0000))
-    call assert_equal("05.34",          s:time_to_string(5.3400))
-    call assert_equal("45.34",          s:time_to_string(45.3400))
-    call assert_equal("01:00.00",       s:time_to_string(60.0000))
-    call assert_equal("01:05.34",       s:time_to_string(65.3400))
-    call assert_equal("01:15.34",       s:time_to_string(75.3400))
-    call assert_equal("01:00:00.00",    s:time_to_string(3600.0000))
-    call assert_equal("60:00:00.00",    s:time_to_string(216000.0000))
-    call assert_equal("100:00:00.00",   s:time_to_string(360000.0000))
-    call assert_equal("200:57:02.12",   s:time_to_string(723422.1234))
+  " test time to string
+  call assert_equal("0.00",           s:time_to_string(0.0000))
+  call assert_equal("0.01",           s:time_to_string(0.0100))
+  call assert_equal("0.28",           s:time_to_string(0.2800))
+  call assert_equal("05.00",          s:time_to_string(5.0000))
+  call assert_equal("05.34",          s:time_to_string(5.3400))
+  call assert_equal("45.34",          s:time_to_string(45.3400))
+  call assert_equal("01:00.00",       s:time_to_string(60.0000))
+  call assert_equal("01:05.34",       s:time_to_string(65.3400))
+  call assert_equal("01:15.34",       s:time_to_string(75.3400))
+  call assert_equal("01:00:00.00",    s:time_to_string(3600.0000))
+  call assert_equal("60:00:00.00",    s:time_to_string(216000.0000))
+  call assert_equal("100:00:00.00",   s:time_to_string(360000.0000))
+  call assert_equal("200:57:02.12",   s:time_to_string(723422.1234))
 
-    if len(v:errors) == 0
-        echom "stopwatch: all tests have passed"
-    else
-        echom "stopwatch: some tests have failed"
-        for i in v:errors
-            echom i
-        endfor
-    endif
+  " test list to string
+  call assert_equal("",                     s:list_to_string([], '|'))
+  call assert_equal("03.14",                s:list_to_string(["03.14"], '|'))
+  call assert_equal("03.14|04.28",          s:list_to_string(["03.14", "04.28"], '|'))
+  call assert_equal("03.14|04.28|01:15.28", s:list_to_string(["03.14", "04.28", "01:15.28"], '|'))
+
+  if len(v:errors) == 0
+     echom "stopwatch: all tests have passed"
+  else
+     echom "stopwatch: some tests have failed"
+     for i in v:errors
+       echom i
+     endfor
+  endif
 endif
