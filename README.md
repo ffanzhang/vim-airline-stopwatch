@@ -1,11 +1,11 @@
 # vim-airline-stopwatch
-- a vim-airline extension that implements a stopwatch
+- a vim-airline extension that implements a stopwatch.
 
 # Requirements
 - vim 8.0
 - vim-airline plugin
 - vim compiled with the following features, this means when you type
-    vim --version, the following features will show up
+    vim --version, the following features will show up.
     - +reltime
     - +timers
 
@@ -19,7 +19,7 @@
   the directory will look like ~/.vim/bundle/vim-airline-stopwatch/..
 
 # Usage
-- also see the Customization section to setup mappings
+- also see the Customization section to setup mappings.
 ```
 :call airline#extensions#stopwatch#run()<CR>
 :call airline#extensions#stopwatch#split()<CR>
@@ -28,8 +28,8 @@
 ```
 
 ## Viewing time splits
-- each time split will create an entry on the statusline. If there are
-too many splits that overflow the statusline, use the type :messges to view
+- each time split will create an entry on the status line. If there are
+too many splits that overflow the status line, type :messges in vim to view
 the splits. Note the final stop time is not included in messages. The
 rationale is stop() is actually pause() in disguise :)
 ```
@@ -37,10 +37,10 @@ rationale is stop() is actually pause() in disguise :)
 ```
 
 # Customization
-## To be placed in your .vimrc
+## To be placed in your .vimrc or appropriate files for your vim configuration
 - (optional) polling_period controls the amount of time between
 each status line update, the bigger the number the slower it is.
-The default number is 50ms. example:
+The default number is 50ms. For example:
 ```
 let g:airline#extensions#stopwatch#polling_period = 50
 ```
@@ -69,8 +69,8 @@ map tt :call airline#extensions#stopwatch#reset()<CR>
 ```
 
 # Caveats
-- Since this plugin is updating the statusline pretty frequently, expect heavy
-  CPU usage. One thing we can do to decrease this percentage is to slow down
+- Since this plugin is updating the status line pretty frequently, expect heavy
+  CPU usage. One thing we can do to decrease this usage is to slow down
   polling by increasing g:airline#extensions#stopwatch#polling_period.
 - This plugin is only designed to time things within a few minutes, we might
   expect memory leak if running for a prolonged period of time.
