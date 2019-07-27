@@ -40,7 +40,7 @@ disable messages by setting let g:airline#extensions#stopwatch#save_to_messages 
 :messages
 ```
 - v0.1.0 and after, we have a more comprehensive summary of split times and
-  stop times.
+  stop times opened in a new buffer.
 ```
 :call airline#extensions#stopwatch#summary()<CR>
 ```
