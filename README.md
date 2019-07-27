@@ -15,6 +15,7 @@
 | [Pathogen] | `git clone https://github.com/ffanzhang/vim-airline-stopwatch ~/.vim/bundle/vim-airline-stopwatch`|
 | [Vundle] | `Plugin 'ffanzhang/vim-airline-stopwatch'` , then :source %, :PluginInstall in vim|
 | [Plug] | `Plug 'ffanzhang/vim-airline-stopwatch'`, then :source %, :PlugInstall in vim|
+| [NeoBundle] | `NeoBundle 'ffanzhang/vim-airline-stopwatch'`|
 - for Pathogen and zipped version, we can also place everything under ~/.vim/bundle, so
   the directory will look like ~/.vim/bundle/vim-airline-stopwatch/..
 
@@ -25,25 +26,49 @@
 :call airline#extensions#stopwatch#split()<CR>
 :call airline#extensions#stopwatch#stop()<CR>
 :call airline#extensions#stopwatch#reset()<CR>
+:call airline#extensions#stopwatch#summary()<CR>
 ```
 
 ## Viewing time splits
 - each time split will create an entry on the status line. If there are
 too many splits that overflow the status line, type :messges in vim to view
 the splits. Note the final stop time is not included in messages. The
-rationale is stop() is actually pause() in disguise :)
+rationale is stop() is actually pause() in disguise :) Also note you can
+disable messages by setting let g:airline#extensions#stopwatch#save_to_messages = 0
+
 ```
 :messages
+```
+- v0.1.0 and after, we have a more comprehensive summary of split times and
+  stop times.
+```
+:call airline#extensions#stopwatch#summary()<CR>
 ```
 
 # Customization
 ## To be placed in your .vimrc or appropriate files for your vim configuration
 - (optional) polling_period controls the amount of time between
 each status line update, the bigger the number the slower it is.
-The default number is 50ms. For example:
+The default number is 50ms. If we want to make it bigger, we can set it to
+100ms for example.
 ```
-let g:airline#extensions#stopwatch#polling_period = 50
+let g:airline#extensions#stopwatch#polling_period = 100
 ```
+- (optional) if we have too many split items,  saving to :messages
+ will disrput us editing by prompting press enter to continue, to disable this
+ default behavior, we can set save_to messages = 0. This also means that if you
+ set this to 0, :messages no longer works.
+```
+let g:airline#extensions#stopwatch#save_to_messages = 0
+```
+- (optional) also if we have too many split items, it's sometimes desirable to
+    limit the max number of extra items on the status line.
+    - -1 means not limit ,and
+    - 0 means just the timer itself.
+```
+let g:airline#extensions#stopwatch#max_extra_items = 5
+```
+
 - setting up shortcut keys so that we don't have to manually type the
 calls every time.
 ```
@@ -51,6 +76,7 @@ map VIM_KEY_SEQUENCE :call airline#extensions#stopwatch#run()<CR>
 map VIM_KEY_SEQUENCE :call airline#extensions#stopwatch#split()<CR>
 map VIM_KEY_SEQUENCE :call airline#extensions#stopwatch#stop()<CR>
 map VIM_KEY_SEQUENCE :call airline#extensions#stopwatch#reset()<CR>
+map VIM_KEY_SEQUENCE :call airline#extensions#stopwatch#summary()<CR>
 ```
 - example 1:
 ```
@@ -58,6 +84,7 @@ map <F4> :call airline#extensions#stopwatch#run()<CR>
 map <F5> :call airline#extensions#stopwatch#split()<CR>
 map <F6> :call airline#extensions#stopwatch#stop()<CR>
 map <F7> :call airline#extensions#stopwatch#reset()<CR>
+map <F8> :call airline#extensions#stopwatch#summary()<CR>
 ```
 - example 2:
 
@@ -66,6 +93,7 @@ map tr :call airline#extensions#stopwatch#run()<CR>
 map tp :call airline#extensions#stopwatch#split()<CR>
 map ts :call airline#extensions#stopwatch#stop()<CR>
 map tt :call airline#extensions#stopwatch#reset()<CR>
+map ty :call airline#extensions#stopwatch#summary()<CR>
 ```
 
 # Caveats
