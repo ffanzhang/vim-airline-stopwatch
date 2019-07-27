@@ -39,7 +39,6 @@ let s:rsp = (g:airline_right_alt_sep == '') ? ('|') : (g:airline_right_alt_sep)
 let s:elapsed_time = 0
 let s:saved_time = 0
 let s:start_time = reltime()
-let s:time_list = []
 let s:running = 0
 
 let s:enum_split = 0
@@ -104,9 +103,9 @@ function! airline#extensions#stopwatch#get()
   endif
   let num_items = g:airline#extensions#stopwatch#max_extra_items
   if num_items == -1
-    let ans = s:list_join(s:time_list, s:spc . s:rsp . s:spc)
+    let ans = s:list_join(s:events[s:enum_split], s:spc . s:rsp . s:spc)
   else
-    let ans = s:list_join(s:get_last_n(s:time_list, num_items), s:spc . s:rsp . s:spc)
+    let ans = s:list_join(s:get_last_n(s:events[s:enum_split], num_items), s:spc . s:rsp . s:spc)
   endif
   if ans != ""
     return ans . s:spc . s:rsp . s:spc . s:time_to_string(s:elapsed_time)
@@ -136,10 +135,9 @@ endfunction
 
 function! airline#extensions#stopwatch#split()
   if s:running == 1
-    call add(s:time_list, s:get_elapsed_time())
     call add(s:events[s:enum_split], s:get_elapsed_time())
     if g:airline#extensions#stopwatch#save_to_messages
-      echom s:list_join(s:time_list, '|')
+      echom s:list_join(s:events[s:enum_split], '|')
     endif
   endif
 endfunction
@@ -159,7 +157,6 @@ function! airline#extensions#stopwatch#reset()
   let s:elapsed_time = 0
   let s:saved_time = 0
   let s:start_time = reltime()
-  let s:time_list = []
   let s:running = 0
   let s:events = [[], []]
   if exists('s:timer')
