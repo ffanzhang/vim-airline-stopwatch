@@ -55,7 +55,7 @@ The default number is 50ms. If we want to make it bigger, we can set it to
 let g:airline#extensions#stopwatch#polling_period = 100
 ```
 - (optional) if we have too many split items,  saving to :messages
- will disrput us editing by prompting press enter to continue, to disable this
+ will disrupt us by prompting press enter to continue, to disable this
  default behavior, we can set save_to messages = 0. This also means that if you
  set this to 0, :messages no longer works.
 ```
@@ -63,7 +63,7 @@ let g:airline#extensions#stopwatch#save_to_messages = 0
 ```
 - (optional) also if we have too many split items, it's sometimes desirable to
     limit the max number of extra items on the status line.
-    - -1 means not limit ,and
+    - -1 means no limit
     - 0 means just the timer itself.
 ```
 let g:airline#extensions#stopwatch#max_extra_items = 5
