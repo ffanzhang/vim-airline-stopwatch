@@ -60,7 +60,7 @@ function! s:time_to_string(time)
     endif
     let cur_time = (time_level < 2) ? (time_units % 60) : time_units
     let time_string = (time_string == '') ? printf('%02d', cur_time) : (printf('%02d', cur_time) . ':' . time_string)
-    let time_units /= 60
+    let time_units = time_units / 60
   endfor
   let time_string = (time_string == '') ? (printf('0.%02d', millis)) : time_string . printf('.%02d', millis)
   return time_string
