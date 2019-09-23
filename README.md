@@ -15,7 +15,7 @@
 | [Pathogen] | `git clone https://github.com/ffanzhang/vim-airline-stopwatch ~/.vim/bundle/vim-airline-stopwatch`|
 | [Vundle] | `Plugin 'ffanzhang/vim-airline-stopwatch'` , then :source %, :PluginInstall |
 | [Plug] | `Plug 'ffanzhang/vim-airline-stopwatch'`, then :source %, :PlugInstall |
-| [NeoBundle] | `NeoBundle 'ffanzhang/vim-airline-stopwatch'`|, then :source %, :NeoBundleInstall |
+| [NeoBundle] | `NeoBundle 'ffanzhang/vim-airline-stopwatch'`, then :source %, :NeoBundleInstall |
 - for Pathogen and zipped version, we can also place everything under ~/.vim/bundle, so
   the directory will look like ~/.vim/bundle/vim-airline-stopwatch/..
 
