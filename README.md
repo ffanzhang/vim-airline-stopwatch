@@ -1,5 +1,7 @@
 # vim-airline-stopwatch
-- a vim-airline extension that implements a stopwatch.
+- a vim-airline extension that implements a stopwatch. One of the things this
+    is designed for is training to improve coding speed and tracking amount of
+    time spent on reading/thinking/coding/debugging. There might be other use cases you might find this useful. Have fun :p
 
 # Requirements
 - vim 8.0
