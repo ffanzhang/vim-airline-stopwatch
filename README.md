@@ -4,8 +4,8 @@
 # Requirements
 - vim 8.0
 - vim-airline plugin
-- vim compiled with the following features, this means when you type
-    vim --version, the following features will show up.
+- vim compiled with reltime and timers. This means when you type
+    :version while running vim, the following features will show up.
     - +reltime
     - +timers
 
@@ -13,9 +13,9 @@
 | Plugin Manager | Install with... |
 | ------------- | ------------- |
 | [Pathogen] | `git clone https://github.com/ffanzhang/vim-airline-stopwatch ~/.vim/bundle/vim-airline-stopwatch`|
-| [Vundle] | `Plugin 'ffanzhang/vim-airline-stopwatch'` , then :source %, :PluginInstall in vim|
-| [Plug] | `Plug 'ffanzhang/vim-airline-stopwatch'`, then :source %, :PlugInstall in vim|
-| [NeoBundle] | `NeoBundle 'ffanzhang/vim-airline-stopwatch'`|
+| [Vundle] | `Plugin 'ffanzhang/vim-airline-stopwatch'` , then :source %, :PluginInstall |
+| [Plug] | `Plug 'ffanzhang/vim-airline-stopwatch'`, then :source %, :PlugInstall |
+| [NeoBundle] | `NeoBundle 'ffanzhang/vim-airline-stopwatch'`|, then :source %, :NeoBundleInstall |
 - for Pathogen and zipped version, we can also place everything under ~/.vim/bundle, so
   the directory will look like ~/.vim/bundle/vim-airline-stopwatch/..
 
@@ -30,16 +30,16 @@
 ```
 
 ## Viewing time splits
-- each time split will create an entry on the status line. If there are
-too many splits that overflow the status line, type :messges in vim to view
-the splits. Note the final stop time is not included in messages. The
+- each call to split will create an entry on the status line. If there are
+too many splits, this plugin will overflow the status line. Type :messges in vim to view
+the splits. Note that the final stop time is not included in messages. The
 rationale is stop() is actually pause() in disguise :) Also note you can
 disable messages by setting let g:airline#extensions#stopwatch#save_to_messages = 0
 
 ```
 :messages
 ```
-- v0.1.0 and after, we have a more comprehensive summary of split times and
+- for v0.1.0 and after, we have a more comprehensive summary of split times and
   stop times opened in a new buffer.
 ```
 :call airline#extensions#stopwatch#summary()<CR>
@@ -54,10 +54,11 @@ The default number is 50ms. If we want to make it bigger, we can set it to
 ```
 let g:airline#extensions#stopwatch#polling_period = 100
 ```
-- (optional) if we have too many split items,  saving to :messages
- will disrupt us by prompting press enter to continue, to disable this
+- (optional) if we have too many split items, saving to :messages
+ will allow vim to disrupt us by prompting "press ENTER or type command to continue", to disable this
  default behavior, we can set save_to messages = 0. This also means that if you
- set this to 0, :messages no longer works.
+ set this to 0, :messages no longer provides splits. But we can still view past
+ splits using the summary() feature.
 ```
 let g:airline#extensions#stopwatch#save_to_messages = 0
 ```
@@ -97,9 +98,8 @@ map ty :call airline#extensions#stopwatch#summary()<CR>
 ```
 
 # Caveats
-- Since this plugin is updating the status line pretty frequently, expect heavy
+- since this plugin is updating the status line pretty frequently, expect heavy
   CPU usage. One thing we can do to decrease this usage is to slow down
   polling by increasing g:airline#extensions#stopwatch#polling_period.
-- This plugin is only designed to time things within a few minutes, we might
+- this plugin is only designed to time things within a few minutes, we might
   expect memory leak if running for a prolonged period of time.
-
