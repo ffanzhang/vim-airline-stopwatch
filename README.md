@@ -10,6 +10,7 @@
     :version while running vim, the following features will show up.
     - +reltime
     - +timers
+- optional vim with python support if you want to add test cases :)
 
 # Installation
 | Plugin Manager | Install with... |
