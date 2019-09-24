@@ -40,7 +40,6 @@ let s:spc = g:airline_symbols.space
 let s:rsp = (g:airline_right_alt_sep == '') ? ('|') : (g:airline_right_alt_sep)
 
 " script critical variables
-let s:elapsed_time = 0
 let s:saved_time = 0
 let s:start_time = reltime()
 let s:running = 0
@@ -56,7 +55,7 @@ function! s:map(l, fn)
 endfunction
 
 function! s:get_elapsed_time()
-  return s:saved_time + reltimefloat(reltime(s:start_time))
+  return (s:running) ? (s:saved_time + reltimefloat(reltime(s:start_time))) : (s:saved_time)
 endfunction
 
 " get at most n last items
@@ -117,15 +116,12 @@ function! airline#extensions#stopwatch#apply(...)
 endfunction
 
 function! airline#extensions#stopwatch#get()
-  if s:running
-    let s:elapsed_time = s:get_elapsed_time()
-  endif
   if g:airline#extensions#stopwatch#max_extra_items == -1
     let ans = join(s:map(s:events[s:enum_split], function('s:time_to_string')), s:spc . s:rsp . s:spc)
   else
     let ans = join(s:map(s:get_last_n(s:events[s:enum_split], g:airline#extensions#stopwatch#max_extra_items), function('s:time_to_string')), s:spc . s:rsp . s:spc)
   endif
-  return (ans == '') ? (s:time_to_string(s:elapsed_time)) : (ans . s:spc . s:rsp . s:spc . s:time_to_string(s:elapsed_time))
+  return (ans == '') ? (s:time_to_string(s:get_elapsed_time())) : (ans . s:spc . s:rsp . s:spc . s:time_to_string(s:get_elapsed_time()))
 endfunction
 
 function! airline#extensions#stopwatch#update(timer)
@@ -151,9 +147,8 @@ endfunction
 
 function! airline#extensions#stopwatch#stop()
   if s:running
-    let s:elapsed_time = s:get_elapsed_time()
-    let s:saved_time = s:elapsed_time
-    call add(s:events[s:enum_stop], s:elapsed_time)
+    let s:saved_time = s:get_elapsed_time()
+    call add(s:events[s:enum_stop], s:saved_time)
     let s:running = 0
   endif
   if exists('s:timer')
@@ -162,7 +157,6 @@ function! airline#extensions#stopwatch#stop()
 endfunction
 
 function! airline#extensions#stopwatch#reset()
-  let s:elapsed_time = 0
   let s:saved_time = 0
   let s:start_time = reltime()
   let s:running = 0
@@ -223,22 +217,19 @@ try:
   vim.command('call airline#extensions#stopwatch#run()')
   time.sleep(1.23)
   vim.command('call airline#extensions#stopwatch#stop()')
-  vim.command('call assert_true(abs(s:elapsed_time - 1.23) < 0.02)')
-  vim.command('call assert_true(abs(s:saved_time - 1.23) < 0.02)')
+  vim.command('call assert_true(abs(s:get_elapsed_time() - 1.23) < 0.02)')
   vim.command('call assert_equal(len(s:events[s:enum_stop]), 1)')
   vim.command('call assert_equal(len(s:events[s:enum_split]), 0)')
 
   # waiting does not increment elapsed_time
   time.sleep(1)
-  vim.command('call assert_true(abs(s:elapsed_time - 1.23) < 0.02)')
-  vim.command('call assert_true(abs(s:saved_time - 1.23) < 0.02)')
+  vim.command('call assert_true(abs(s:get_elapsed_time() - 1.23) < 0.02)')
 
   # continue running the stopwatch, should not account the 1 second pause time
   vim.command('call airline#extensions#stopwatch#run()')
   time.sleep(2.15)
   vim.command('call airline#extensions#stopwatch#stop()')
-  vim.command('call assert_true(abs(s:elapsed_time - 3.38) < 0.02)')
-  vim.command('call assert_true(abs(s:saved_time - 3.38) < 0.02)')
+  vim.command('call assert_true(abs(s:get_elapsed_time() - 3.38) < 0.02)')
   time.sleep(0.5)
 
   # splitting
@@ -257,7 +248,6 @@ try:
   vim.command('call assert_equal(len(s:events[s:enum_stop]), 0)')
   vim.command('call assert_equal(len(s:events[s:enum_split]), 0)')
   vim.command('call assert_equal(s:saved_time, 0)')
-  vim.command('call assert_equal(s:elapsed_time, 0)')
   vim.command('call assert_equal(s:running, 0)')
 
   # clean up properly from running to resetting
@@ -267,7 +257,6 @@ try:
   vim.command('call assert_equal(len(s:events[s:enum_stop]), 0)')
   vim.command('call assert_equal(len(s:events[s:enum_split]), 0)')
   vim.command('call assert_equal(s:saved_time, 0)')
-  vim.command('call assert_equal(s:elapsed_time, 0)')
   vim.command('call assert_equal(s:running, 0)')
 
   # clean up properly from stopping to resetting
@@ -278,7 +267,6 @@ try:
   vim.command('call assert_equal(len(s:events[s:enum_stop]), 0)')
   vim.command('call assert_equal(len(s:events[s:enum_split]), 0)')
   vim.command('call assert_equal(s:saved_time, 0)')
-  vim.command('call assert_equal(s:elapsed_time, 0)')
   vim.command('call assert_equal(s:running, 0)')
 
   # should not allow split while stopping
@@ -295,7 +283,7 @@ try:
   vim.command('call airline#extensions#stopwatch#run()')
   time.sleep(0.13)
   vim.command('call airline#extensions#stopwatch#stop()')
-  vim.command('call assert_true(abs(s:elapsed_time - 0.26) < 0.02)')
+  vim.command('call assert_true(abs(s:get_elapsed_time() - 0.26) < 0.02)')
   vim.command('call airline#extensions#stopwatch#reset()')
 
   # calling stop after stop should not have change stopwatch state
@@ -304,7 +292,7 @@ try:
   vim.command('call airline#extensions#stopwatch#stop()')
   time.sleep(0.13)
   vim.command('call airline#extensions#stopwatch#stop()')
-  vim.command('call assert_true(abs(s:elapsed_time - 0.13) < 0.02)')
+  vim.command('call assert_true(abs(s:get_elapsed_time() - 0.13) < 0.02)')
 except Exception as e:
   print(e)
 
